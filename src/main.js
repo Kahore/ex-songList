@@ -1,6 +1,7 @@
 import Vue from 'vue'
+import VueRouter from 'vue-router'
 import App from './App.vue'
-import router from './router'
+import { routes } from './routes'
 import store from './store/store'
 import { MdButton, MdField, MdCard, MdList, MdDivider, MdDialog, MdProgress, MdTooltip, MdContent, MdTabs } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
@@ -18,7 +19,14 @@ Vue.use(MdTooltip)
 Vue.use(MdContent)
 Vue.use(MdTabs)
 
+Vue.use(VueRouter)
 Vue.config.productionTip = false
+
+const router = new VueRouter({
+  mode: 'history',
+  routes,
+  base: process.env.BASE_URL
+})
 
 new Vue({
   router,
