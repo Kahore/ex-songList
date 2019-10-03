@@ -1,4 +1,4 @@
-import SongService from '../../SongService'
+import SongService from '../../service/Song'
 export default {
   state: {
     songs: [],
@@ -15,6 +15,7 @@ export default {
   mutations: {
     loadSongs (state, payload) {
       state.songs = payload
+      state.isLoading_SongList = !state.isLoading_SongList
     },
     MUTATE_SONG_ADD (state, payload) {
       state.songs.unshift(payload)
@@ -25,10 +26,9 @@ export default {
   },
   actions: {
     async loadSongs ({ commit }, payload) {
-      commit('mutate_isLoading')
-      let songs = await SongService.getSongs()
+      commit('loadSongs', [])
+      let songs = await SongService.getSongs(payload)
       commit('loadSongs', songs)
-      commit('mutate_isLoading')
     }
   }
 }

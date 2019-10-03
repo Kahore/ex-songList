@@ -5,6 +5,12 @@
     <div v-if="isLoading_SongList">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
+    <div>
+       <md-button
+          type="submit"
+          class="md-primary"
+          @click="loadSongs()">Clear filter</md-button>
+    </div>
       <md-list
         class="md-triple-line"
         v-for="(song, index) in songs"
@@ -13,8 +19,14 @@
         <md-list-item>
           <div class="md-list-item-text">
             <span>{{song.name}}</span>
-            <span>{{song.artist}} - {{song.album}}</span>
-            <p>{{song.genre}} - {{song.year}}</p>
+            <span>
+              <a href="" @click.prevent="loadSongs({artist:song.artist})">{{song.artist}}</a> -
+              <a href="" @click.prevent="loadSongs({album:song.album})">{{song.album}}</a>
+            </span>
+            <p>
+              <a href="" @click.prevent="loadSongs({genre:song.genre})">{{song.genre}}</a> -
+              <a href="" @click.prevent="loadSongs({year:song.year})">{{song.year}}</a>
+            </p>
           </div>
           <div class="iblock">
             <md-button class="md-icon-button md-list-action">
@@ -46,10 +58,21 @@ export default {
     }
   },
   async created () {
-    try {
-      await this.$store.dispatch('loadSongs')
-    } catch (error) {
-      this.error = error.message
+    await this.loadSongs()
+  },
+  methods: {
+    async loadSongs (params) {
+      try {
+        let filter = params
+        console.log('TCL: loadSongs -> params', filter)
+        if (typeof filter === 'undefined') {
+          await this.$store.dispatch('loadSongs')
+        } else {
+          await this.$store.dispatch('loadSongs', filter)
+        }
+      } catch (error) {
+        this.error = error.message
+      }
     }
   }
 }

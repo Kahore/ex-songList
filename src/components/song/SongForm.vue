@@ -62,12 +62,12 @@
         </md-card>
   </form>
   </md-dialog>
-  <md-button class="md-primary md-raised" @click="showDialog = true">Show Dialog</md-button>
+  <md-button class="md-primary md-raised" @click="showDialog = true">Add new</md-button>
   </section>
 </template>
 
 <script>
-import SongService from '../../SongService'
+import SongService from '../../service/Song'
 export default {
   name: 'SongForm',
   data () {
@@ -90,11 +90,10 @@ export default {
         genre: this.genre,
         year: this.year
       }
-      await SongService.insertSong(data).then(res=>{
-        data = {...data, _id: res.data._id}
+      await SongService.insertSong(data).then(res => {
+        data = { ...data, _id: res.data._id }
         this.$store.commit('MUTATE_SONG_ADD', data)
       })
-      // this.posts = await SongService.getSongs()
     }
   }
 }

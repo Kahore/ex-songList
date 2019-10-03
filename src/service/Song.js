@@ -1,10 +1,20 @@
 import axios from 'axios'
 const URL = 'api/songs/'
 class SongService {
-  static getSongs () {
+  static getSongs (params) {
     return new Promise(async (resolve, reject) => {
+      let filter = typeof params === 'undefined' ? '' : params
       try {
-        const res = await axios.get(URL)
+        let res
+        if (typeof params === 'undefined') {
+          res = await axios.get(URL)
+        } else {
+          res = await axios.get(URL, {
+            params: {
+              filter
+            }
+          })
+        }
         const data = res.data
         resolve(
           data.map(song => ({
