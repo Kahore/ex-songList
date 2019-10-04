@@ -4,6 +4,7 @@ class SongService {
   static getSongs (params) {
     return new Promise(async (resolve, reject) => {
       let filter = typeof params === 'undefined' ? '' : params
+      console.log('TCL: SongService -> getSongs -> filter', filter)
       try {
         let res
         if (typeof params === 'undefined') {
@@ -32,8 +33,13 @@ class SongService {
       text
     })
   }
-
+  static updateSong (songInfo) {
+    return axios.put(URL, {
+      songInfo
+    })
+  }
   static deleteSong (id) {
+    console.log('TCL: SongService -> deleteSong -> id', id)
     return axios.delete(`${URL}${id}`)
   }
 }

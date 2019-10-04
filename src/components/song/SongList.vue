@@ -29,11 +29,15 @@
             </p>
           </div>
           <div class="iblock">
-            <md-button class="md-icon-button md-list-action">
+            <md-button
+              class="md-icon-button md-list-action"
+              @click="editModalSong({_id:song._id})">
               <md-icon class="md-primary">build</md-icon>
               <md-tooltip md-direction="top">edit</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button md-list-action">
+            <md-button
+              class="md-icon-button md-list-action"
+              @click="deleteSong(song._id)">
               <md-icon class="md-primary">delete</md-icon>
               <md-tooltip md-direction="top">delete</md-tooltip>
             </md-button>
@@ -46,6 +50,7 @@
 </template>
 
 <script>
+import EventBus from '../../EventBus'
 import { mapGetters } from 'vuex'
 export default {
   name: 'HelloWorld',
@@ -64,12 +69,26 @@ export default {
     async loadSongs (params) {
       try {
         let filter = params
-        console.log('TCL: loadSongs -> params', filter)
         if (typeof filter === 'undefined') {
           await this.$store.dispatch('loadSongs')
         } else {
           await this.$store.dispatch('loadSongs', filter)
         }
+      } catch (error) {
+        this.error = error.message
+      }
+    },
+    editModalSong (songIdParam) {
+      try {
+        this.$store.dispatch('loadSong_single', songIdParam)
+        EventBus.$emit('MODAL_RISE')
+      } catch (error) {
+        this.error = error.message
+      }
+    },
+    deleteSong (songId) {
+      try {
+        this.$store.dispatch('MUTATE_SONG_DELETE', songId)
       } catch (error) {
         this.error = error.message
       }
