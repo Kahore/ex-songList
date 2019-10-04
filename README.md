@@ -1,4 +1,18 @@
-# client
+# Song list app
+It's an example on fullstack Vue.js and Express.js project.
+
+This project is built with 
+- [vue-cli](https://github.com/vuejs/vue-cli)
+- [vuex](https://github.com/vuejs/vuex)
+- [vue router](https://github.com/vuejs/vue-router)
+- [vuematerial](https://vuematerial.io)
+- [express](https://expressjs.com/)
+- [mongodb Atlas](https://www.mongodb.com/)
+
+## Features
+- App cover CUD operation
+- Songs operatoin work with [API](https://quiet-coast-13492.herokuapp.com/api/songs)
+- Also there is a possibillity to see list of artist. This list also get from another [API](https://quiet-coast-13492.herokuapp.com/api/artists)
 
 ## Project setup
 ```
@@ -9,26 +23,3 @@ npm install
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
