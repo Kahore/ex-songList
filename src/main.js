@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import { routes } from './routes'
 import store from './store/store'
@@ -20,6 +21,7 @@ Vue.use(MdContent)
 Vue.use(MdTabs)
 
 Vue.use(VueRouter)
+Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
 const router = new VueRouter({

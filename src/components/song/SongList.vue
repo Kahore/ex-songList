@@ -27,6 +27,9 @@
               <a href="" @click.prevent="loadSongs({genre:song.genre})">{{song.genre}}</a> -
               <a href="" @click.prevent="loadSongs({year:song.year})">{{song.year}}</a>
             </p>
+            <span>
+              {{getDateTime(song.createdAt)}}
+            </span>
           </div>
           <div class="iblock">
             <md-button
@@ -55,7 +58,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'HelloWorld',
   computed: {
-    ...mapGetters(['songs', 'isLoading_SongList'])
+    ...mapGetters(['songs', 'isLoading_SongList']),
   },
   data () {
     return {
@@ -92,6 +95,17 @@ export default {
       } catch (error) {
         this.error = error.message
       }
+    },
+    getDateTime (createdAt) {
+      let day = createdAt
+      let dd = String(day.getDate()).padStart(2, '0')
+      let mm = String(day.getMonth() + 1).padStart(2, '0')
+      let yyyy = day.getFullYear()
+      let hh = String(day.getHours()).padStart(2, '0')
+      let min = String(day.getMinutes()).padStart(2, '0')
+      let ss = String(day.getSeconds()).padStart(2, '0')
+      day = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':' + ss
+      return day
     }
   }
 }

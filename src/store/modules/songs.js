@@ -41,8 +41,8 @@ export default {
       let index = state.songs.findIndex(song => song._id === payload)
       state.songs.splice(index, 1)
     },
-    mutate_isLoading (state) {
-      state.isLoading_SongList = !state.isLoading_SongList
+    mutate_isLoading_SongForm (state) {
+      state.isLoading_SongForm = !state.isLoading_SongForm
     }
   },
   actions: {

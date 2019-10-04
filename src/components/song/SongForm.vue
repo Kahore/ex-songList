@@ -14,45 +14,40 @@
       <md-card-content>
         <div class="md-layout md-gutter">
           <div class="md-layout-item md-small-size-100">
-            <md-field>
+            <md-field :class="getValidationClass('name')">
               <label for="name">Song name</label>
               <md-input name="name" id="name" v-model="songInfo.name" />
-                <!-- <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span> -->
+              <span class="md-error" v-if="!$v.songInfo.name.required">The song name is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-small-size-100">
-              <md-field>
+              <md-field :class="getValidationClass('artist')">
                 <label for="artist">Artist</label>
                 <md-input name="artist" id="artist" autocomplete="family-name" v-model="songInfo.artist" :disabled="sending" />
-                <!-- <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span> -->
+                <span class="md-error" v-if="!$v.songInfo.artist.required">The artist is required</span>
               </md-field>
             </div>
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item md-small-size-100">
-            <md-field>
+            <md-field :class="getValidationClass('album')">
               <label for="album">Album</label>
               <md-input name="album" id="album" v-model="songInfo.album" />
-              <!-- <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-              <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span> -->
+              <span class="md-error" v-if="!$v.songInfo.album.required">The album is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-small-size-100">
-            <md-field>
+            <md-field :class="getValidationClass('album')">
               <label for="genre">Genre</label>
               <md-input name="genre" id="genre" v-model="songInfo.genre" />
-              <!-- <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-              <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span> -->
+              <span class="md-error" v-if="!$v.songInfo.genre.required">The genre is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-small-size-100">
-            <md-field>
+            <md-field :class="getValidationClass('year')">
               <label for="year">Year</label>
               <md-input name="year" id="year" v-model="songInfo.year" />
-              <!-- <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-              <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span> -->
+              <span class="md-error" v-if="!$v.songInfo.year.required">The year is required</span>
             </md-field>
           </div>
         </div>
@@ -61,8 +56,7 @@
           <md-button
             type="submit"
             class="md-primary"
-            :disabled="sending"
-            @click="modalToggler(false)">
+            :disabled="sending">
             <template v-if="songInfo._id">
               Edit
             </template>
@@ -80,9 +74,10 @@
 
 <script>
 import EventBus from '../../EventBus'
-import { SONG_INFO } from '../../store/model/song'
 import SongService from '../../service/Song'
+import { SONG_INFO } from '../../store/model/song'
 import { mapGetters } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'SongForm',
   mounted () {
@@ -90,7 +85,6 @@ export default {
       this.modalToggler(true)
     })
   },
-
   data () {
     return {
       showDialog: false,
@@ -100,24 +94,57 @@ export default {
   computed: {
     ...mapGetters(['songInfo', 'isLoading_SongForm'])
   },
+  validations: {
+    songInfo: {
+      name: {
+        required
+      },
+      artist: {
+        required
+      },
+      album: {
+        required
+      },
+      genre: {
+        required
+      },
+      year: {
+        required
+      }
+    }
+  },
   methods: {
+    getValidationClass (fieldName) {
+      const field = this.$v.songInfo[fieldName]
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty
+        }
+      }
+    },
     modalRiseForCreate () {
       this.resetDetails()
+      this.$store.commit('mutate_isLoading_SongForm')
       this.showDialog = true
     },
     modalToggler (mode) {
       this.showDialog = mode
     },
     saveSong (songInfo) {
-      let isNew = this._isNew(songInfo)
-      this.sending = true
-      if (isNew) {
-        this.createSong(songInfo)
-      } else {
-        this.updateSong(songInfo)
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        let isNew = this._isNew(songInfo)
+        this.sending = true
+        if (isNew) {
+          this.createSong(songInfo)
+        } else {
+          this.updateSong(songInfo)
+        }
+        this.sending = false
+        this.resetDetails()
+        this.modalToggler(false)
+        this.$store.commit('mutate_isLoading_SongForm')
       }
-      this.sending = false
-      this.resetDetails()
     },
     async createSong (songInfo) {
       let data = songInfo
@@ -147,5 +174,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// .md-error input, .md--error textarea, .md--error input:focus, .md--error input:hover {
+//     border-color: #f79483;
+// }
 
+// .form-group__message--error {
+//    display: none;
+// }
+//  .form-group--error > .form-group__message--error {
+//     font-size: 0.75rem;
+//     display: block;
+//     color: #f57f6c;
+// }
 </style>
