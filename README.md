@@ -6,6 +6,7 @@ This project is built with
 - [vuex](https://github.com/vuejs/vuex)
 - [vue router](https://github.com/vuejs/vue-router)
 - [vuematerial](https://vuematerial.io)
+- [vuelidate](https://github.com/vuelidate/vuelidate)
 - [express](https://expressjs.com/)
 - [mongodb Atlas](https://www.mongodb.com/)
 
